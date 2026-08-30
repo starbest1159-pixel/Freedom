@@ -1,0 +1,8 @@
+{
+  "name": "FREEDOM",
+  "description": "FREEDOM — ระบบจัดการภาพยนตร์และสตรีมมิ่งสด จัดการภาพยนตร์ หมวดหมู่ ผู้ใช้งาน และระบบสตรีม HLS",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
