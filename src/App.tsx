@@ -143,7 +143,16 @@ export default function App() {
 
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
   const [genres, setGenres] = useState<Genre[]>(INITIAL_GENRES);
-  const [banners, setBanners] = useState<Banner[]>(INITIAL_BANNERS);
+  const [banners, setBanners] = useState<Banner[]>(() => {
+    try {
+      const local = localStorage.getItem('movieflix_banners');
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return INITIAL_BANNERS;
+  });
   const [users, setUsers] = useState<User[]>(INITIAL_USERS);
   const [faqs, setFaqs] = useState<FAQItem[]>(INITIAL_FAQS);
   const [seo, setSeo] = useState<SeoConfig>(INITIAL_SEO);
@@ -350,6 +359,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('movieflix_notifications', JSON.stringify(notifications));
   }, [notifications]);
+
+  useEffect(() => {
+    localStorage.setItem('movieflix_banners', JSON.stringify(banners));
+  }, [banners]);
 
   // Live Stream Handlers
   const handleUpdateStreams = (updatedStreams: LiveStream[]) => {
@@ -801,6 +814,7 @@ export default function App() {
                 <BannersManagement
                   banners={banners}
                   onUpdateBanners={setBanners}
+                  onOpenPreview={() => setIsPreviewWebsiteOpen(true)}
                 />
               )}
 
