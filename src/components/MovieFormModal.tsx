@@ -198,6 +198,8 @@ export const MovieFormModal: React.FC<MovieFormModalProps> = ({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
       <div className="bg-[#1A1A1A] border border-white/10 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl my-8 fade-in flex flex-col max-h-[90vh]">

@@ -81,14 +81,24 @@ export const MovieCinemaPlayerModal: React.FC<MovieCinemaPlayerModalProps> = ({
   onClose,
   onSelectOtherMovie,
 }) => {
-  if (!isOpen || !movie) return null;
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimeoutRef = useRef<number | null>(null);
 
   // Available servers for this movie
   const servers: MovieServer[] = React.useMemo(() => {
+    if (!movie) {
+      return [
+        {
+          id: 'srv-master',
+          name: 'Server 1 - Movieflix Super 4K Master',
+          quality: '4K UHD',
+          url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          audio: 'พากย์ไทย (Master 5.1)',
+          sub: 'ซับไทย / English',
+        },
+      ];
+    }
     const customUrl = movie.streamUrl || movie.trailerUrl;
     const baseList: MovieServer[] = [
       {
@@ -129,7 +139,16 @@ export const MovieCinemaPlayerModal: React.FC<MovieCinemaPlayerModalProps> = ({
     return baseList;
   }, [movie]);
 
-  const [selectedServer, setSelectedServer] = useState<MovieServer>(servers[0]);
+  const [selectedServer, setSelectedServer] = useState<MovieServer>(
+    servers[0] || {
+      id: 'srv-master',
+      name: 'Server 1 - Movieflix Super 4K Master',
+      quality: '4K UHD',
+      url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      audio: 'พากย์ไทย (Master 5.1)',
+      sub: 'ซับไทย / English',
+    }
+  );
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -318,7 +337,9 @@ export const MovieCinemaPlayerModal: React.FC<MovieCinemaPlayerModalProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const otherMovies = allMovies.filter((m) => m.id !== movie.id).slice(0, 8);
+  if (!isOpen || !movie) return null;
+
+  const otherMovies = allMovies.filter((m) => m && m.id !== movie.id).slice(0, 8);
 
   return (
     <div

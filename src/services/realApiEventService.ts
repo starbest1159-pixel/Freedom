@@ -55,14 +55,14 @@ class RealApiEventService {
       },
       {
         eventType: 'api_sync',
-        url: 'https://api.themoviedb.org/3/movie/popular?language=th-TH&page=1',
+        url: 'https://api.seriesjeen.online/api/platforms/health',
         method: 'GET',
         statusCode: 200,
         statusText: 'OK',
-        latencyMs: 142,
-        edgeNode: 'SIN-Edge-01',
-        bytes: 48900,
-        details: 'TMDB OpenAPI synchronized with local movie catalog.',
+        latencyMs: 48,
+        edgeNode: 'BKK-Edge-01',
+        bytes: 8900,
+        details: 'Series Open API platform telemetry sync: 64 drama providers verified online.',
       },
     ];
 

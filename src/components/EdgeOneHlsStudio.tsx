@@ -71,8 +71,6 @@ const PRESET_HLS_STREAMS = [
 ];
 
 export const EdgeOneHlsStudio: React.FC<EdgeOneHlsStudioProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-
   // Active Main Tab
   const [activeTab, setActiveTab] = useState<'player' | 'signer' | 'events' | 'code'>('player');
 
@@ -265,6 +263,8 @@ export const EdgeOneHlsStudio: React.FC<EdgeOneHlsStudioProps> = ({ isOpen, onCl
     if (eventFilter === 'all') return true;
     return e.eventType === eventFilter;
   });
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-xl animate-fade-in overflow-y-auto">

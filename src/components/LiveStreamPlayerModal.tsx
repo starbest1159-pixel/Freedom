@@ -65,13 +65,12 @@ export const LiveStreamPlayerModal: React.FC<LiveStreamPlayerModalProps> = ({
   onSelectOtherStream,
 }) => {
   const { t, language } = useLanguage();
-  if (!isOpen || !stream) return null;
 
   const streamList = (allStreams && allStreams.length > 0 ? allStreams : otherStreams) || [];
   const handleSelectStream = onSelectStream || onSelectOtherStream || (() => {});
 
   const [selectedServer, setSelectedServer] = useState<StreamServer>(
-    stream.streamServers[0] || {
+    stream?.streamServers?.[0] || {
       id: 'srv-default',
       name: 'Server 1 - หลัก HD',
       quality: '1080p 60FPS',
@@ -93,14 +92,14 @@ export const LiveStreamPlayerModal: React.FC<LiveStreamPlayerModalProps> = ({
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
   // Simulated live viewers fluctuation
-  const [liveViewers, setLiveViewers] = useState(stream.currentViewers || 185000);
+  const [liveViewers, setLiveViewers] = useState(stream?.currentViewers || 185000);
 
   // Update selected server when stream changes
   useEffect(() => {
-    if (stream.streamServers && stream.streamServers.length > 0) {
+    if (stream?.streamServers && stream.streamServers.length > 0) {
       setSelectedServer(stream.streamServers[0]);
     }
-    setLiveViewers(stream.currentViewers || 185000);
+    setLiveViewers(stream?.currentViewers || 185000);
 
     // Initial chat messages
     const initial = PRESET_MESSAGES.map((msg, idx) => ({
@@ -220,6 +219,8 @@ export const LiveStreamPlayerModal: React.FC<LiveStreamPlayerModalProps> = ({
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (!isOpen || !stream) return null;
 
   // Other live matches for quick switching
   const otherMatches = (streamList || []).filter((s) => s && s.id !== stream.id);

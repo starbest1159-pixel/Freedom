@@ -32,10 +32,10 @@ export const LiveStreamNotifyModal: React.FC<LiveStreamNotifyModalProps> = ({
   stream,
   onSendNotification,
 }) => {
-  if (!isOpen || !stream) return null;
-
-  const defaultTitle = `🔴 เริ่มถ่ายทอดสดแล้ว! ${stream.title}`;
-  const defaultMessage = `⚽ ${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) เปิดฉากแล้ว! รับชมสดแบบ 4K UHD 60FPS พากย์ไทย ไม่มีโฆษณากวนใจ`;
+  const defaultTitle = stream ? `[ถ่ายทอดสด] ${stream.title}` : '';
+  const defaultMessage = stream
+    ? `${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) กำลังถ่ายทอดสด รับชมความคมชัดระดับ 4K UHD 60FPS พากย์ไทย`
+    : '';
 
   const [title, setTitle] = useState(defaultTitle);
   const [message, setMessage] = useState(defaultMessage);
@@ -48,14 +48,16 @@ export const LiveStreamNotifyModal: React.FC<LiveStreamNotifyModalProps> = ({
 
   useEffect(() => {
     if (stream) {
-      setTitle(`🔴 เริ่มถ่ายทอดสดแล้ว! ${stream.title}`);
+      setTitle(`[ถ่ายทอดสด] ${stream.title}`);
       setMessage(
-        `⚽ ${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) เปิดฉากแล้ว! รับชมสดแบบ ${stream.resolution || '4K UHD'} พากย์ไทย สัญญาณสดคมชัด`
+        `${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) เปิดฉากแล้ว รับชมสดแบบ ${stream.resolution || '4K UHD'} พากย์ไทย สัญญาณสดคมชัด`
       );
       setSendSuccess(false);
       setIsSending(false);
     }
   }, [stream]);
+
+  if (!isOpen || !stream) return null;
 
   const audienceStats = {
     all: { label: 'ผู้ใช้งานทุกคนในระบบ (All Users)', count: 142500 },
@@ -71,27 +73,27 @@ export const LiveStreamNotifyModal: React.FC<LiveStreamNotifyModalProps> = ({
   const presets = [
     {
       id: 'start',
-      label: '🔴 แมตช์เริ่มแข่งแล้ว (Live Now)',
-      title: `🔴 เริ่มถ่ายทอดสดแล้ว! ${stream.title}`,
-      message: `⚽ ศึกเดือด ${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) เริ่มสตรีมแล้ว! คลิกเพื่อรับชมสดทันที`,
+      label: 'แมตช์เริ่มแข่งแล้ว (Live Now)',
+      title: `[ถ่ายทอดสด] เริ่มแล้ว: ${stream.title}`,
+      message: `${stream.league} (${stream.homeTeam.name} พบ ${stream.awayTeam.name}) เริ่มสตรีมแล้ว คลิกเพื่อรับชมสดทันที`,
     },
     {
       id: 'countdown',
-      label: '⏳ ใกล้เริ่มใน 15 นาที',
-      title: `⏳ เตรียมตัวรับชม! ${stream.title} ในอีก 15 นาที`,
-      message: `🏆 การแข่งขัน ${stream.league} กำลังจะเริ่มในเวลา ${stream.matchTime} ล็อกอินเข้าแอปพร้อมเลือกเซิร์ฟเวอร์ 4K ได้เลย!`,
+      label: 'ใกล้เริ่มใน 15 นาที',
+      title: `[แจ้งเตือน] เตรียมตัวรับชม: ${stream.title} ในอีก 15 นาที`,
+      message: `การแข่งขัน ${stream.league} กำลังจะเริ่มในเวลา ${stream.matchTime} ล็อกอินเข้าแอปพร้อมเลือกเซิร์ฟเวอร์ 4K ได้เลย`,
     },
     {
       id: 'goal',
-      label: '⚽ ประตูแรกมาแล้ว! อัปเดตสกอร์',
-      title: `⚽ GOAL!! มีประตูเกิดขึ้นในคู่ ${stream.title}`,
-      message: `🔥 สกอร์สดขณะนี้ ${stream.homeTeam.name} ${stream.homeTeam.score ?? 0} - ${stream.awayTeam.score ?? 0} ${stream.awayTeam.name} (${stream.currentMinute || "สด"}) อย่าพลาดชมช็อตสำคัญ!`,
+      label: 'ประตูแรกมาแล้ว (อัปเดตสกอร์)',
+      title: `[GOAL] มีประตูเกิดขึ้นในคู่ ${stream.title}`,
+      message: `สกอร์สดขณะนี้ ${stream.homeTeam.name} ${stream.homeTeam.score ?? 0} - ${stream.awayTeam.score ?? 0} ${stream.awayTeam.name} (${stream.currentMinute || "สด"})`,
     },
     {
       id: 'bigmatch',
-      label: '🔥 ซูเปอร์บิ๊กแมตช์ ประจำสัปดาห์',
-      title: `🔥 ซูเปอร์บิ๊กแมตช์ห้ามพลาด: ${stream.title}`,
-      message: `⭐ บิ๊กแมตช์หยุดโลก ${stream.league} สดจาก${stream.stadium || 'สนาม'} พากย์ไทยโดยทีมงานมืออาชีพ รับชมพร้อมกันกว่า 100,000 คน`,
+      label: 'ซูเปอร์บิ๊กแมตช์ ประจำสัปดาห์',
+      title: `[บิ๊กแมตช์] ห้ามพลาด: ${stream.title}`,
+      message: `บิ๊กแมตช์สำคัญ ${stream.league} สดจาก${stream.stadium || 'สนาม'} พากย์ไทยโดยทีมงานมืออาชีพ`,
     },
   ];
 

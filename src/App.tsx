@@ -365,8 +365,19 @@ export default function App() {
   }, [banners]);
 
   // Live Stream Handlers
-  const handleUpdateStreams = (updatedStreams: LiveStream[]) => {
-    setLiveStreams(updatedStreams);
+  const handleAddLiveStream = (stream: LiveStream) => {
+    setLiveStreams([stream, ...liveStreams]);
+    showToast(language === 'th' ? `เพิ่มสตรีมสด "${stream.title}" แล้ว` : `Added live stream "${stream.title}"`);
+  };
+
+  const handleUpdateLiveStream = (stream: LiveStream) => {
+    setLiveStreams(liveStreams.map((s) => (s.id === stream.id ? stream : s)));
+    showToast(language === 'th' ? `อัปเดตข้อมูลสตรีม "${stream.title}" แล้ว` : `Updated "${stream.title}"`);
+  };
+
+  const handleDeleteLiveStream = (id: string) => {
+    setLiveStreams(liveStreams.filter((s) => s.id !== id));
+    showToast(language === 'th' ? 'ลบรายการถ่ายทอดสดแล้ว' : 'Deleted live stream');
   };
 
   const handlePlayLiveStream = (stream: LiveStream) => {
@@ -842,8 +853,10 @@ export default function App() {
               {currentTab === 'live-streams' && (
                 <LiveStreamManagement
                   streams={liveStreams}
-                  onUpdateStreams={handleUpdateStreams}
-                  onPlayStream={handlePlayLiveStream}
+                  onAddStream={handleAddLiveStream}
+                  onUpdateStream={handleUpdateLiveStream}
+                  onDeleteStream={handleDeleteLiveStream}
+                  onOpenPlayer={handlePlayLiveStream}
                   onSendNotification={handleSendLiveNotification}
                 />
               )}

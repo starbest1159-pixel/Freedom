@@ -28,13 +28,14 @@ import { useLanguage } from '../context/LanguageContext';
 interface CommandPaletteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentTab: AdminMenuTab;
+  currentTab?: AdminMenuTab;
   onSelectTab: (tab: AdminMenuTab) => void;
   onOpenAddMovie: () => void;
   onOpenApiSync: () => void;
   onOpenPreview: () => void;
   onOpenShortcuts: () => void;
   onToggleDualUser?: () => void;
+  onToggleSidebar?: () => void;
   movies: Movie[];
   onPlayMovie: (movie: Movie) => void;
 }
@@ -48,6 +49,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   onOpenPreview,
   onOpenShortcuts,
   onToggleDualUser,
+  onToggleSidebar,
   movies,
   onPlayMovie,
 }) => {
